@@ -5,63 +5,87 @@ class World:
 		self.data = {'items':ET.parse(path + 'items.xml').getroot(),'rooms':ET.parse(path + 'rooms.xml').getroot(),'doors':ET.parse(path + 'doors.xml').getroot(),'init':ET.parse(path + 'init.xml').getroot()}
 		
 		self.items = {}
-		self.containers = {}
 		self.rooms = {}
-				
+		
+		# CREATE items
 		for item in self.data['items']:
 			self.items[item.get('id')] = Item(item)
-
+		# CREATE rooms
 		for room in self.data['rooms']:
 			self.rooms[room.get('id')] = Room(room.find('name').text,room.find('desc').text)
-			#print(room)
 		
-		
+		# MOVE items into containers
 		for container in self.data['init'].find('containers'):
 			for item in container.findall('item'):
 				self.items[item.text].actMove(self.items[container.get('id')])
-		
+		# MOVE items into rooms
 		for room in self.data['init'].find('rooms'):
 			for item in room.findall('item'):
 				self.items[item.text].actMove(self.rooms[room.get('id')])
 
 
 
-			'''
-			print("{} : ".format(container.get('id')))
-			for item in container.findall('item'):
-				print("-  {}".format(item.text))
-			'''	
-			
+				
+				
+				
+				
+				
+class Item:
+	def __init__(self,dataInit):
+		self.id = dataInit.get('id')
+		self.name = dataInit.find('name').text
+		self.desc = dataInit.find('desc').text
 		
-			
-			
-		'''	
-		for room in self.data['rooms']:
-			self.rooms[room.get('id')] = Room(room.find('name').text,room.find('desc').text)
-			
-			for item in room.find('inventory').findall('item'):
-				self.rooms[room.get('id')].itemAdd(self.items[item.get('id')])
-			
-			for container in room.find('inventory').findall('container'):
-				self.rooms[room.get('id')].itemAdd(self.containers[container.get('id')])
+		self.movable = True
+		self.container = False
+		
+		self.owner = abyss
+		self.inventory = []
+		abyss.inventory.append(self)
+		
+		
+		if (dataInit.find('flags').find('movable') is not None and dataInit.find('flags').find('movable').text == 'False'):
+			self.movable = False
+		
+		if (dataInit.find('flags').find('container') is not None and dataInit.find('flags').find('container').text == 'True'):
+			self.container = True
 
-
-
-
-
-
-
-
-		for container in self.data['containers']:
-			self.containers[container.get('id')] = Container(container.find('name').text,container.find('desc').text,container.find('flags').find('movable').text)
-
-		for container in self.data['containers']:
-			for item in container.find('inventory').findall('item'):
-				self.containers[container.get('id')].itemAdd(self.items[item.get('id')])
-
-			for item in container.find('inventory').findall('container'):
-				self.containers[container.get('id')].itemAdd(self.containers[item.get('id')])
-		'''	
+	def actMove(self,target,silent=False):
+		if (self.movable or self.owner == abyss):
+			if (target.container or target == abyss):
+				self.owner.inventory.remove(self)
+				self.owner = target
+				
+				self.owner.inventory.append(self)
+				self.owner.inventory.sort(key=lambda item:item.name)
+				
+				return [True,"The {} has been moved inside the {}.".format(self.name,self.owner.name)]
+			else:
+				return [False,"The {} won't fit inside of the {}.".format(self.name,target.name)]
+		else:
+			return [False,"The {} cannot be moved.".format(self.name)]
+		
+	def listInventory(self):
+		if (self.container):
+			if (len(self.inventory)):
+				return [True,", ".join(map(lambda item: item.name,self.inventory))]
+			else:
+				return [True,"The {} is empty.".format(self.name)]
+		else:
+			return [False,"The {} is not a container.".format(self.name)]
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 
 
 
@@ -140,58 +164,6 @@ class Player(MovableObject):
 		
 		
 		
-class Item:
-	def __init__(self,dataInit):
-		self.id = dataInit.get('id')
-		self.name = dataInit.find('name').text
-		self.desc = dataInit.find('desc').text
-		
-		self.flags = dataInit.find('flags')
-
-		self.movable = True #self.flags.find('movable').text
-		self.container = False #self.flags.find('container').text
-		
-		self.owner = abyss
-		self.inventory = []
-		
-		abyss.inventory.append(self)
-		
-		
-		if (self.flags.find('movable') is not None and self.flags.find('movable').text == 'False'):
-			self.movable = False
-		
-		if (self.flags.find('container') is not None and self.flags.find('container').text == 'True'):
-			self.container = True
-			
-		
-		del self.flags
-			
-		#print(str(self.__dict__).replace('}','\n\n').replace('{','').replace(", '","\n'"))
-		
-
-	def actMove(self,target,silent=False):
-		if (self.movable or self.owner == abyss):
-			if (target.container or target == abyss):
-				self.owner.inventory.remove(self)
-				self.owner = target
-				
-				self.owner.inventory.append(self)
-				self.owner.inventory.sort(key=lambda item:item.name)
-				
-				return [True,"The {} has been moved inside the {}.".format(self.name,self.owner.name)]
-			else:
-				return [False,"The {} won't fit inside of the {}.".format(self.name,target.name)]
-		else:
-			return [False,"The {} cannot be moved.".format(self.name)]
-		
-	def listInventory(self):
-		if (self.container):
-			if (len(self.inventory)):
-				return [True,", ".join(map(lambda item: item.name,self.inventory))]
-			else:
-				return [True,"The {} is empty.".format(self.name)]
-		else:
-			return [False,"The {} is not a container.".format(self.name)]
 
 
 
