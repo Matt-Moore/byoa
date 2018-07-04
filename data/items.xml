@@ -1,0 +1,83 @@
+<?xml version= "1.0"?>
+<items>
+	<item id="key1">
+		<name>Fancy Key</name>
+		<desc>a brass key, with an ornate design.</desc>
+		<flags>
+		</flags>
+	</item>
+	<item id="key2">
+		<name>Blank Key</name>
+		<desc>a simple key, with no teeth cut in it yet.</desc>
+		<flags>
+		</flags>
+	</item>
+	<item id="key3">
+		<name>Skeleton Key</name>
+		<desc>an elaborate key, made of ivory. Its teeth are constantly changing.</desc>
+		<flags>
+		</flags>
+	</item>
+	
+	<item id="item1">
+		<name>Deck of Cards</name>
+		<desc>a standard deck of 52 playing cards.</desc>
+		<flags>
+		</flags>
+	</item>
+	<item id="item2">
+		<name>Folders A-K</name>
+		<desc>a collection of standard, manilla folders. They contain papers filed between A and K.</desc>
+		<flags>
+			<container>True</container>
+		</flags>
+	</item>
+	<item id="item3">
+		<name>Folders L-P</name>
+		<desc>a collection of standard, manilla folders. They contain papers filed between L and P.</desc>
+		<flags>
+			<container>True</container>
+		</flags>
+	</item>
+	<item id="item4">
+		<name>Folders Q-Z</name>
+		<desc>a collection of standard, manilla folders. They contain papers filed between Q and Z.</desc>
+		<flags>
+			<container>True</container>
+		</flags>
+	</item>
+
+	<item id="container1">
+		<name>Bureau</name>
+		<desc>a free-standing dresser, made of wood and has 6 drawers.</desc>
+		<flags>
+			<movable>False</movable>
+			<container>True</container>
+		</flags>
+	</item>
+	<item id="container2">
+		<name>Box of Cards</name>
+		<desc>a small cardboard box, for holding a deck of playing cards.</desc>
+		<flags>
+			<container>True</container>
+		</flags>
+	</item>
+	<item id="container3">
+		<name>Filing Cabinet</name>
+		<desc>a two meter tall, metal filing cabinet. It has three drawers.</desc>
+		<flags>
+			<movable>False</movable>
+			<container>True</container>
+		</flags>
+	</item>
+	<item id="container4">
+		<name>Desk</name>
+		<desc>A common, wooden working desk.</desc>
+		<flags>
+			<movable>False</movable>
+			<container>True</container>
+		</flags>
+	</item>
+
+
+</items>
